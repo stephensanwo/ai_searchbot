@@ -1,0 +1,76 @@
+{% extends "base.html" %} 
+{% block content %}
+
+
+<div class="page-content">
+  <section class = "page-content-container">
+    <h1>AI Powered Customer Care Chatbot Demo</h1>
+    <button id="startButton" onclick="startChatSession()" class="button button-primary">Start Chat Session
+  </section>
+  <section class="chat-container" id="chat-container">
+    <h4>AI Assistant</h4>
+    <form id="messageForm" action="" onsubmit="sendMessage(event)" class="chat-box">
+      <div class="chat-history">    
+        <div id='messages'>
+        </div>
+      </div>
+      <div class = "send-box">
+        <input type="text" id="messageText" autocomplete="off" placeholder="Ask the AI Assistant a Question"/>
+        <button class="button button-primary">Send</button>
+      </div>
+    </form>
+
+    <script>
+        let ws = null;        
+        const chatWindow = document.getElementById("chat-container");
+        chatWindow.style.display = "none";
+        
+        function startChatSession() {
+            chatWindow.style.display = "flex";
+            ws = new WebSocket("ws://localhost:8000/ws");
+            ws.onopen = function() {
+                document.getElementById('startButton').disabled = true;
+                showMessage("AI Assistant: Hello this is the AI Assistant. How can I help you today?");
+            };
+
+            ws.onmessage = function(event) {
+                showMessage(event.data);
+            };
+
+            ws.onclose = function() {
+                console.log("Chat session closed");
+                document.getElementById('startButton').disabled = false;
+                ws = null;
+            };
+
+            ws.onerror = function(error) {
+                console.error("WebSocket error: ", error);
+            };
+            
+        }
+
+        function showMessage(response) {
+            const messages = document.getElementById('messages')
+            const message = document.createElement('p')
+            const content = document.createTextNode(response)
+            message.appendChild(content)
+            messages.appendChild(message)
+        }
+
+        function sendMessage(event) {
+            if (ws === null || ws.readyState !== WebSocket.OPEN) {
+                alert("Chat session not started. Click 'Start Chat Session' button first.");
+                return;
+            }
+
+            const input = document.getElementById("messageText")
+            
+            showMessage(`Customer: ${input.value}`)
+            ws.send(input.value)
+            input.value = ''
+            event.preventDefault()
+        }
+    </script>
+  </section>
+</div>
+{% endblock %}

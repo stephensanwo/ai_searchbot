@@ -1,0 +1,62 @@
+.page-content-container {
+    height: calc(100vh - 300px);
+    padding-top: 5%;
+}
+
+
+.chat-container {
+    min-height: 800px;
+    width: 500px;
+    padding-top: 15px;
+    position: absolute;
+    bottom: 50px;
+    right: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-container>h4 {
+    padding-left: 24px;
+
+}
+
+input {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ccc;
+    padding: 0 15px;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+#messages>p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+#startButton {
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.chat-box {
+    flex: 1;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.send-box {
+    display: flex;
+    height: 50px;
+}
+
+.chat-history {
+    flex: 1;
+    border-top: 1px solid #ccc;
+    padding: 24px;
+}
