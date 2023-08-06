@@ -13,7 +13,6 @@ load_dotenv()
 loader = CSVLoader(file_path='__mock__/captured_texts.csv')
 
 data = loader.load()
-print(data)
 
 # Chunk your data up into smaller documents
 text_splitter = RecursiveCharacterTextSplitter(
@@ -37,8 +36,8 @@ pinecone.init(
 print("Pinecone Initialized")
 index_name = "doctest-index"
 
-# docsearch = Pinecone.from_texts(
-#     [t.page_content for t in texts], embeddings, index_name=index_name)
+docsearch = Pinecone.from_texts(
+    [t.page_content for t in texts], embeddings, index_name=index_name)
 
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 # Query those docs to get your answer back
@@ -46,15 +45,9 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
 chain = load_qa_chain(llm, chain_type="stuff")
 
+#  Test Query
 query = "What are the top 2 one-bedroom properties below $200?"
 docs = docsearch.similarity_search(query)
 
 res = chain.run(input_documents=docs, question=query)
 print(res)
-
-
-# query = "what are the different types of data warehouse?"
-# docs = docsearch.similarity_search(query, include_metadata=True)
-
-# res = chain.run(input_documents=docs, question=query)
-# print(res)
